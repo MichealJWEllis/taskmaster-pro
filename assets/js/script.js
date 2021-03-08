@@ -45,6 +45,56 @@ var saveTasks = function () {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+$(".card .list-group").sortable({
+  connectWith: $(".card .list-group"),
+  scroll: false,
+  tolerance: "pointer",
+  helper: "clone",
+  activate: function(event) {
+    console.log("activate", this);
+  },
+  deactivate: function(event) {
+    console.log("deactivate", this);
+  },
+  over: function(event) {
+    console.log("over", event.target);
+  },
+  out: function(event) {
+    console.log("out", event.target);
+  },
+  update: function(event) {
+    // array to store the task data in
+    var tempArr = [];
+    // loop over current set of children in sortable list
+    $(this).children().each(function() {
+      // add task data to the temp array as an object
+      tempArr.push({
+      
+      text: $(this)
+        .find("p")
+        .text()
+        .trim(),
+      date: $(this)
+        .find("span")
+        .text()
+        .trim()
+      
+      });
+    });
+    // trim down list's ID to match object property
+    var arrName = $(this)
+      .attr("id")
+      .replace("list-", "");
+
+    // update array on tasks object and save
+    tasks[arrName] = tempArr;
+    saveTasks();
+  },
+  stop: function(event) {
+    $(this).removeClass("dropover");
+  }
+});
+
 
 
 
@@ -191,52 +241,7 @@ $("#remove-tasks").on("click", function () {
   saveTasks();
 });
 
-$(".card .list-group").sortable({
-  connectWith: $(".card .list-group"),
-  scroll: false,
-  tolerance: "pointer",
-  helper: "clone",
-  activate: function(event) {
-    console.log("activate", this);
-  },
-  deactivate: function(event) {
-    console.log("deactivate", this);
-  },
-  over: function(event) {
-    console.log("over", event.target);
-  },
-  out: function(event) {
-    console.log("out", event.target);
-  },
-  update: function(event) {
-    // array to store the task data in
-    var tempArr = [];
-    // loop over current set of children in sortable list
-    $(this).children().each(function() {
-      var text = $(this)
-        .find("p")
-        .text()
-        .trim();
-      var date = $(this)
-        .find("span")
-        .text()
-        .trim();
-      // add task data to the temp array as an object
-      tempArr.push({
-        text: text,
-        date: date
-      });
-    });
-    // trim down list's ID to match object property
-    var arrName = $(this)
-      .attr("id")
-      .replace("list-", "");
 
-    // update array on tasks object and save
-    tasks[arrName] = tempArr;
-    saveTasks();
-  }
-});
 
 // trash icon can be dropped onto
 $("#trash").droppable({
@@ -244,13 +249,13 @@ $("#trash").droppable({
   tolerance: "touch",
   drop: function(event, ui) {
     ui.draggable.remove();
-    console.log("drop");
+    
   },
   over: function(event, ui) {
-    console.log("over");
+    console.log(ui);
   },
   out: function(event, ui) {
-    console.log("out");
+    console.log(ui);
   }
 });
 
