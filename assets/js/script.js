@@ -120,7 +120,7 @@ $("#task-form-modal").on("shown.bs.modal", function () {
 });
 
 // save button in modal was clicked
-$("#task-form-modal .btn-primary").click(function () {
+$("#task-form-modal .btn-save").click(function () {
   // get form values
   var taskText = $("#modalTaskDescription").val();
   var taskDate = $("#modalDueDate").val();
@@ -275,7 +275,7 @@ var auditTask = function(taskEl) {
   } else if (Math.abs(moment().diff(time, "days")) <= 2) {
     $(taskEl).addClass("list-group-item-warning");
   }
-  console.log(taskEl);
+  // console.log(taskEl);
 }
 
 
@@ -290,11 +290,11 @@ $("#trash").droppable({
     
   },
   over: function(event, ui) {
-    console.log(ui);
+    // console.log(ui);
     $(".bottom-trash").addClass("bottom-trash-active");
   },
   out: function(event, ui) {
-    console.log(ui);
+    // console.log(ui);
     $(".bottom-trash").removeClass("bottom-trash-active");
   }
 });
